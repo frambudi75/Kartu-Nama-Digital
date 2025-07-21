@@ -170,28 +170,126 @@ const showToast = (message, type = 'success') => {
     }, 3000);
 };
 
-// Dark Mode Toggle
-const darkModeToggle = document.getElementById('darkModeToggle');
-const body = document.body;
-const html = document.documentElement;
-
-// Check for saved dark mode preference
-const isDarkMode = localStorage.getItem('darkMode') === 'true';
-if (isDarkMode) {
-    body.classList.add('dark');
-    html.classList.add('dark');
-}
-
-darkModeToggle.addEventListener('click', () => {
-    body.classList.toggle('dark');
-    html.classList.toggle('dark');
+// Dark Mode Toggle - Simplified and Fixed
+const initDarkMode = () => {
+    console.log('Initializing dark mode...');
     
-    // Save preference
-    localStorage.setItem('darkMode', body.classList.contains('dark'));
+    const darkModeToggle = document.getElementById('darkModeToggle');
+    const body = document.body;
+    const html = document.documentElement;
+
+    if (!darkModeToggle) {
+        console.error('Dark mode toggle button not found!');
+        // Try to find it with different selector
+        const altToggle = document.querySelector('[id="darkModeToggle"]') || document.querySelector('.dark-mode-toggle');
+        if (altToggle) {
+            console.log('Found alternative dark mode toggle');
+            darkModeToggle = altToggle;
+        } else {
+            console.error('No dark mode toggle found at all');
+            return;
+        }
+    }
+
+    console.log('Dark mode toggle found:', darkModeToggle);
+
+    // Check for saved dark mode preference
+    const savedDarkMode = localStorage.getItem('darkMode');
+    const isDarkMode = savedDarkMode === 'true';
+
+    console.log('Saved dark mode preference:', savedDarkMode);
+
+    // Apply initial dark mode state
+    if (isDarkMode) {
+        body.classList.add('dark');
+        html.classList.add('dark');
+        console.log('Applied initial dark mode');
+    }
+
+    // Simple dark mode toggle function
+    const toggleDarkMode = (e) => {
+        console.log('Dark mode toggle clicked!');
+        
+        if (e) {
+            e.preventDefault();
+            e.stopPropagation();
+        }
+        
+        // Toggle dark mode classes
+        const isCurrentlyDark = body.classList.contains('dark');
+        
+        if (isCurrentlyDark) {
+            body.classList.remove('dark');
+            html.classList.remove('dark');
+            localStorage.setItem('darkMode', 'false');
+            console.log('Switched to light mode');
+        } else {
+            body.classList.add('dark');
+            html.classList.add('dark');
+            localStorage.setItem('darkMode', 'true');
+            console.log('Switched to dark mode');
+        }
+        
+        // Haptic feedback
+        if ('vibrate' in navigator) {
+            navigator.vibrate(50);
+        }
+        
+        // Show toast notification
+        const isNowDark = body.classList.contains('dark');
+        if (typeof showToast === 'function') {
+            showToast(isNowDark ? 'Mode gelap diaktifkan' : 'Mode terang diaktifkan');
+        }
+        
+        // Track dark mode toggle
+        if (typeof trackEvent === 'function') {
+            trackEvent('dark_mode_toggle', {
+                mode: isNowDark ? 'dark' : 'light'
+            });
+        }
+    };
+
+    // Add event listener
+    darkModeToggle.addEventListener('click', toggleDarkMode);
     
-    // Show toast
-    showToast(body.classList.contains('dark') ? 'Mode gelap diaktifkan' : 'Mode terang diaktifkan');
-});
+    // Also add touch event for mobile
+    darkModeToggle.addEventListener('touchend', (e) => {
+        e.preventDefault();
+        toggleDarkMode();
+    });
+
+    // Listen for system dark mode changes
+    if (window.matchMedia) {
+        window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', (e) => {
+            if (localStorage.getItem('darkMode') === null) {
+                if (e.matches) {
+                    body.classList.add('dark');
+                    html.classList.add('dark');
+                } else {
+                    body.classList.remove('dark');
+                    html.classList.remove('dark');
+                }
+            }
+        });
+    }
+
+    console.log('Dark mode initialized successfully:', isDarkMode ? 'ON' : 'OFF');
+};
+
+// Backup dark mode toggle for immediate execution
+const setupDarkModeImmediate = () => {
+    const darkModeToggle = document.getElementById('darkModeToggle');
+    if (darkModeToggle) {
+        darkModeToggle.onclick = function(e) {
+            e.preventDefault();
+            document.body.classList.toggle('dark');
+            document.documentElement.classList.toggle('dark');
+            const isDark = document.body.classList.contains('dark');
+            localStorage.setItem('darkMode', isDark.toString());
+            console.log('Dark mode toggled (immediate):', isDark);
+        };
+    }
+};
 
 // View Counter
 let viewCount = parseInt(localStorage.getItem('viewCount') || '0');
@@ -441,9 +539,30 @@ window.addEventListener('unhandledrejection', (e) => {
 
 // Enhanced Initialization with Performance Monitoring
 document.addEventListener('DOMContentLoaded', () => {
+    console.log('DOM Content Loaded - Starting initialization...');
     const startTime = performance.now();
     
-    trackPageView();
+    // Initialize dark mode first with timeout fallback
+    try {
+        initDarkMode();
+    } catch (error) {
+        console.error('Error initializing dark mode:', error);
+        // Fallback initialization
+        setupDarkModeImmediate();
+    }
+    
+    // Additional fallback after short delay
+    setTimeout(() => {
+        const toggle = document.getElementById('darkModeToggle');
+        if (toggle && !toggle.onclick) {
+            console.log('Setting up fallback dark mode toggle');
+            setupDarkModeImmediate();
+        }
+    }, 100);
+    
+    if (typeof trackPageView === 'function') {
+        trackPageView();
+    }
     
     // Add skill tag hover effects with performance optimization
     const skillTags = document.querySelectorAll('.skill-tag');
@@ -471,8 +590,8 @@ document.addEventListener('DOMContentLoaded', () => {
     // Enhanced contact method tracking
     document.querySelectorAll('.contact-method').forEach(method => {
         method.addEventListener('click', () => {
-            const methodType = method.querySelector('.text-xs').textContent;
-            const methodValue = method.querySelector('.font-medium').textContent;
+            const methodType = method.querySelector('.text-xs') ? method.querySelector('.text-xs').textContent : 'unknown';
+            const methodValue = method.querySelector('.font-medium') ? method.querySelector('.font-medium').textContent : 'unknown';
             
             trackEvent('contact_method_click', {
                 type: methodType,
@@ -484,7 +603,8 @@ document.addEventListener('DOMContentLoaded', () => {
     // Social media click tracking
     document.querySelectorAll('.social-icon').forEach(icon => {
         icon.addEventListener('click', () => {
-            const platform = icon.querySelector('i').className.split(' ').find(cls => cls.startsWith('fa-'));
+            const iconElement = icon.querySelector('i');
+            const platform = iconElement ? iconElement.className.split(' ').find(cls => cls.startsWith('fa-')) : 'unknown';
             trackEvent('social_media_click', {
                 platform: platform
             });
@@ -494,15 +614,18 @@ document.addEventListener('DOMContentLoaded', () => {
     // Check if there's a success parameter in URL (from Formspree redirect)
     const urlParams = new URLSearchParams(window.location.search);
     if (urlParams.get('success') === 'true') {
-        document.getElementById('form-success').classList.remove('hidden');
-        trackEvent('form_submit_success', {});
-        
-        // Hide success message after 5 seconds
-        setTimeout(() => {
-            document.getElementById('form-success').classList.add('hidden');
-            // Clean URL
-            window.history.replaceState({}, document.title, window.location.pathname);
-        }, 5000);
+        const successElement = document.getElementById('form-success');
+        if (successElement) {
+            successElement.classList.remove('hidden');
+            trackEvent('form_submit_success', {});
+            
+            // Hide success message after 5 seconds
+            setTimeout(() => {
+                successElement.classList.add('hidden');
+                // Clean URL
+                window.history.replaceState({}, document.title, window.location.pathname);
+            }, 5000);
+        }
     }
     
     // Performance monitoring
@@ -537,6 +660,8 @@ document.addEventListener('DOMContentLoaded', () => {
     document.querySelectorAll('.tab-content, .profile-container, .contact-method').forEach(el => {
         observer.observe(el);
     });
+    
+    console.log('Application initialized successfully');
 });
 
 // Add loading states and skeleton screens

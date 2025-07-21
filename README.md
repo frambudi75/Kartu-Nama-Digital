@@ -69,14 +69,18 @@
 
 ```
 kontak.habibframbudi.my.id/
-├── 📄 index.html          # Main HTML file
-├── 🎨 style.css           # Custom styles & animations
-├── ⚡ script.js           # JavaScript functionality
-├── 🔧 sw.js              # Service Worker
-├── 📱 manifest.json      # PWA manifest
-├── 🖼️ habib.png          # Profile image
-├── ⚙️ .user.ini          # Server configuration
-└── 📖 README.md          # Documentation
+├── 📄 index.html                    # Main HTML file
+├── 🎨 style.css                     # Custom styles & animations
+├── ⚡ script.js                     # JavaScript functionality
+├── 🔧 sw.js                        # Service Worker
+├── 📱 manifest.json                # PWA manifest
+├── 🖼️ habib.png                    # Profile image
+├── ⚙️ .user.ini                    # Server configuration
+├── 🔒 .htaccess                    # Apache security configuration
+├── 🔒 nginx.conf                   # Nginx security configuration (BT Panel)
+├── 🔒 bt-panel-rate-limiting.conf  # BT Panel rate limiting config
+├── 🔒 security-headers.php         # PHP security implementation
+└── 📖 README.md                    # Documentation
 ```
 
 ---
@@ -269,14 +273,26 @@ const analyticsConfig = {
 # - SQL injection and XSS protection
 ```
 
-#### **Nginx (nginx.conf)**
+#### **Nginx (nginx.conf) - BT Panel Compatible**
 ```nginx
-# Enterprise-level security configuration
-# - SSL/TLS optimization
-# - Advanced rate limiting
-# - Security headers and CSP
-# - Hotlink protection
-# - Malicious user agent blocking
+# Enterprise-level security configuration for BT Panel
+# - SSL/TLS optimization dengan BT Panel paths
+# - Advanced rate limiting dan connection limits
+# - Security headers dan enhanced CSP
+# - Hotlink protection dengan valid referers
+# - Malicious user agent blocking (nikto, sqlmap, nmap)
+# - Enhanced static file handling
+# - PWA-specific configurations
+```
+
+#### **BT Panel Rate Limiting (bt-panel-rate-limiting.conf)**
+```nginx
+# Add to main nginx.conf http block via BT Panel
+# - Rate limiting zones (login, general, api)
+# - Connection limiting per IP
+# - User agent blocking maps
+# - CloudFlare real IP configuration
+# - Enhanced gzip compression
 ```
 
 #### **PHP Security (security-headers.php)**
@@ -303,16 +319,41 @@ initSecurity([
 | **Hotlink Protection** | ✅ | ✅ | ✅ |
 | **HTTPS Enforcement** | ✅ | ✅ | ✅ |
 
+### **BT Panel Deployment Guide**
+
+#### **Step 1: Upload Files**
+```bash
+# Upload semua files ke /www/wwwroot/kontak.habibframbudi.my.id/
+# Set file permissions: 644 untuk files, 755 untuk directories
+```
+
+#### **Step 2: Configure Nginx**
+```bash
+# 1. Copy nginx.conf content ke BT Panel > Website > Settings > Config File
+# 2. Add bt-panel-rate-limiting.conf content ke main nginx.conf http block
+# 3. Test configuration: nginx -t
+# 4. Reload nginx: systemctl reload nginx
+```
+
+#### **Step 3: SSL Certificate**
+```bash
+# 1. BT Panel > Website > SSL > Let's Encrypt
+# 2. Enable Force HTTPS
+# 3. Verify SSL configuration
+```
+
 ### **Deployment Security Checklist**
 
-- [ ] **SSL Certificate** - Install valid SSL certificate
-- [ ] **Security Headers** - Configure appropriate headers
-- [ ] **File Permissions** - Set proper file permissions (644 for files, 755 for directories)
-- [ ] **Rate Limiting** - Configure rate limiting rules
-- [ ] **Firewall** - Set up web application firewall
-- [ ] **Monitoring** - Enable security event logging
-- [ ] **Backup** - Regular security-focused backups
-- [ ] **Updates** - Keep server software updated
+- [ ] **SSL Certificate** - Install via BT Panel Let's Encrypt
+- [ ] **Security Headers** - Configure via nginx.conf
+- [ ] **File Permissions** - Set 644 for files, 755 for directories
+- [ ] **Rate Limiting** - Add bt-panel-rate-limiting.conf to main nginx.conf
+- [ ] **Firewall** - Configure BT Panel firewall rules
+- [ ] **Monitoring** - Enable access/error logs in BT Panel
+- [ ] **Backup** - Setup automated backups in BT Panel
+- [ ] **Updates** - Keep BT Panel and server software updated
+- [ ] **PHP Security** - Include security-headers.php if using PHP
+- [ ] **Test Configuration** - Verify all security headers with online tools
 
 ---
 

@@ -23,7 +23,7 @@ body {
 }
 
 body.dark {
-    background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+    background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%) !important;
 }
 
 .card-container {
@@ -354,7 +354,14 @@ body.dark {
     box-shadow: 0 4px 12px rgba(0,0,0,0.2);
 }
 
-/* Dark Mode Styles */
+/* Dark Mode Styles - Enhanced with higher specificity */
+html.dark body,
+html.dark body.bg-gray-100,
+body.dark,
+body.bg-gray-100.dark {
+    background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%) !important;
+}
+
 .dark .back {
     background: #1f2937 !important;
     color: #f9fafb;
