@@ -255,6 +255,67 @@ const analyticsConfig = {
 
 ---
 
+## 🔒 **Security Configuration**
+
+### **Web Server Security**
+
+#### **Apache (.htaccess)**
+```apache
+# Comprehensive security configuration included
+# - File access protection
+# - Security headers (CSP, HSTS, X-Frame-Options)
+# - Rate limiting and bot protection
+# - Compression and caching
+# - SQL injection and XSS protection
+```
+
+#### **Nginx (nginx.conf)**
+```nginx
+# Enterprise-level security configuration
+# - SSL/TLS optimization
+# - Advanced rate limiting
+# - Security headers and CSP
+# - Hotlink protection
+# - Malicious user agent blocking
+```
+
+#### **PHP Security (security-headers.php)**
+```php
+# Include for PHP-based deployments
+require_once 'security-headers.php';
+initSecurity([
+    'rate_limit' => true,
+    'max_requests' => 60,
+    'check_user_agent' => true
+]);
+```
+
+### **Security Features Implemented**
+
+| Feature | Apache | Nginx | PHP |
+|---------|--------|-------|-----|
+| **File Access Protection** | ✅ | ✅ | ✅ |
+| **Security Headers** | ✅ | ✅ | ✅ |
+| **Rate Limiting** | ✅ | ✅ | ✅ |
+| **Bot Protection** | ✅ | ✅ | ✅ |
+| **XSS Protection** | ✅ | ✅ | ✅ |
+| **SQL Injection Protection** | ✅ | ✅ | ✅ |
+| **Hotlink Protection** | ✅ | ✅ | ✅ |
+| **HTTPS Enforcement** | ✅ | ✅ | ✅ |
+
+### **Deployment Security Checklist**
+
+- [ ] **SSL Certificate** - Install valid SSL certificate
+- [ ] **Security Headers** - Configure appropriate headers
+- [ ] **File Permissions** - Set proper file permissions (644 for files, 755 for directories)
+- [ ] **Rate Limiting** - Configure rate limiting rules
+- [ ] **Firewall** - Set up web application firewall
+- [ ] **Monitoring** - Enable security event logging
+- [ ] **Backup** - Regular security-focused backups
+- [ ] **Updates** - Keep server software updated
+
+---
+
 ## 🤝 **Contributing**
 
 1. **Fork** the repository

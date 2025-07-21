@@ -1,0 +1,131 @@
+# ========================================
+# SECURITY CONFIGURATION FOR APACHE
+# Digital Business Card - Habib Frambudi
+# ========================================
+
+# 1. Blokir akses langsung ke kode sumber
+<FilesMatch "\.(php|html|js|css|tpl|inc|log|htaccess|env|sql|json|yml|yaml|xml|ini|conf)$">
+    Order Allow,Deny
+    Deny from all
+</FilesMatch>
+
+# Izinkan akses ke file utama yang diperlukan
+<FilesMatch "^(index\.html|style\.css|script\.js|manifest\.json|sw\.js|habib\.png)$">
+    Order Allow,Deny
+    Allow from all
+</FilesMatch>
+
+# 2. Proteksi file sensitif
+<FilesMatch "^(config\.php|database\.yml|\.env|composer\.json|package\.json|\.user\.ini)$">
+    Order Allow,Deny
+    Deny from all
+</FilesMatch>
+
+# 3. Blokir direktori sistem
+RedirectMatch 404 ^/(vendor|node_modules|storage|uploads/private|\.git|\.svn)
+
+# 4. Nonaktifkan directory listing
+Options -Indexes
+
+# 5. Header keamanan
+<IfModule mod_headers.c>
+    Header always set X-Frame-Options "SAMEORIGIN"
+    Header always set X-XSS-Protection "1; mode=block"
+    Header always set X-Content-Type-Options "nosniff"
+    Header always set Referrer-Policy "strict-origin-when-cross-origin"
+    Header always set Strict-Transport-Security "max-age=31536000; includeSubDomains"
+    Header always set Permissions-Policy "geolocation=(), microphone=(), camera=()"
+    
+    # Content Security Policy
+    Header always set Content-Security-Policy "default-src 'self'; script-src 'self' 'unsafe-inline' https://cdn.tailwindcss.com https://cdnjs.cloudflare.com https://cdn.jsdelivr.net; style-src 'self' 'unsafe-inline' https://cdn.tailwindcss.com https://cdnjs.cloudflare.com https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com https://cdnjs.cloudflare.com; img-src 'self' data: https:; connect-src 'self' https://formspree.io; frame-src https://www.google.com; object-src 'none'; base-uri 'self';"
+</IfModule>
+
+# 6. Kompresi untuk performa
+<IfModule mod_deflate.c>
+    AddOutputFilterByType DEFLATE text/plain
+    AddOutputFilterByType DEFLATE text/html
+    AddOutputFilterByType DEFLATE text/xml
+    AddOutputFilterByType DEFLATE text/css
+    AddOutputFilterByType DEFLATE application/xml
+    AddOutputFilterByType DEFLATE application/xhtml+xml
+    AddOutputFilterByType DEFLATE application/rss+xml
+    AddOutputFilterByType DEFLATE application/javascript
+    AddOutputFilterByType DEFLATE application/x-javascript
+    AddOutputFilterByType DEFLATE application/json
+</IfModule>
+
+# 7. Batasi HTTP methods
+<LimitExcept GET POST HEAD>
+    Order Allow,Deny
+    Deny from all
+</LimitExcept>
+
+# 8. Proteksi dari hotlinking
+<IfModule mod_rewrite.c>
+    RewriteEngine On
+    RewriteCond %{HTTP_REFERER} !^$
+    RewriteCond %{HTTP_REFERER} !^https?://(www\.)?kontak\.habibframbudi\.my\.id [NC]
+    RewriteCond %{HTTP_REFERER} !^https?://(www\.)?habibframbudi\.my\.id [NC]
+    RewriteRule \.(jpg|jpeg|png|gif|css|js)$ - [F,L]
+</IfModule>
+
+# 9. Cache control untuk static assets
+<IfModule mod_expires.c>
+    ExpiresActive On
+    ExpiresByType text/css "access plus 1 month"
+    ExpiresByType application/javascript "access plus 1 month"
+    ExpiresByType image/png "access plus 1 month"
+    ExpiresByType image/jpg "access plus 1 month"
+    ExpiresByType image/jpeg "access plus 1 month"
+    ExpiresByType image/gif "access plus 1 month"
+    ExpiresByType application/json "access plus 1 week"
+</IfModule>
+
+# 10. Blokir user agents berbahaya
+<IfModule mod_rewrite.c>
+    RewriteEngine On
+    RewriteCond %{HTTP_USER_AGENT} ^$ [OR]
+    RewriteCond %{HTTP_USER_AGENT} ^(java|curl|wget) [NC,OR]
+    RewriteCond %{HTTP_USER_AGENT} (winhttp|HTTrack|clshttp|archiver|loader|email|harvest|extract|grab|miner) [NC]
+    RewriteRule .* - [F,L]
+</IfModule>
+
+# 11. Rate limiting (jika mod_evasive tersedia)
+<IfModule mod_evasive24.c>
+    DOSHashTableSize    2048
+    DOSPageCount        10
+    DOSSiteCount        50
+    DOSPageInterval     1
+    DOSSiteInterval     1
+    DOSBlockingPeriod   600
+</IfModule>
+
+# 12. Proteksi dari SQL injection dan XSS
+<IfModule mod_rewrite.c>
+    RewriteEngine On
+    RewriteCond %{QUERY_STRING} (\<|%3C).*script.*(\>|%3E) [NC,OR]
+    RewriteCond %{QUERY_STRING} GLOBALS(=|\[|\%[0-9A-Z]{0,2}) [OR]
+    RewriteCond %{QUERY_STRING} _REQUEST(=|\[|\%[0-9A-Z]{0,2}) [OR]
+    RewriteCond %{QUERY_STRING} proc/self/environ [OR]
+    RewriteCond %{QUERY_STRING} mosConfig_[a-zA-Z_]{1,21}(=|\%3D) [OR]
+    RewriteCond %{QUERY_STRING} base64_(en|de)code\(.*\) [OR]
+    RewriteCond %{QUERY_STRING} (\<|%3C).*iframe.*(\>|%3E) [NC,OR]
+    RewriteCond %{QUERY_STRING} (\<|%3C).*object.*(\>|%3E) [NC,OR]
+    RewriteCond %{QUERY_STRING} (\<|%3C).*embed.*(\>|%3E) [NC]
+    RewriteRule .* - [F,L]
+</IfModule>
+
+# 13. Blokir akses ke file backup dan temporary
+<FilesMatch "\.(bak|backup|swp|tmp|temp|old|orig|save)$">
+    Order Allow,Deny
+    Deny from all
+</FilesMatch>
+
+# 14. Custom error pages
+ErrorDocument 403 /index.html
+ErrorDocument 404 /index.html
+ErrorDocument 500 /index.html
+
+# 15. Disable server signature
+ServerTokens Prod
+ServerSignature Off
