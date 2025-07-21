@@ -395,10 +395,10 @@ This project is licensed under the **MIT License** - see the [LICENSE](LICENSE) 
 
 ## 📊 **Project Stats**
 
-![GitHub repo size](https://img.shields.io/github/repo-size/habibframbudi/digital-business-card)
-![GitHub last commit](https://img.shields.io/github/last-commit/habibframbudi/digital-business-card)
-![GitHub issues](https://img.shields.io/github/issues/habibframbudi/digital-business-card)
-![GitHub stars](https://img.shields.io/github/stars/habibframbudi/digital-business-card)
+![GitHub repo size](https://img.shields.io/github/repo-size/habibframbudi/Kartu-Nama-Digital)
+![GitHub last commit](https://img.shields.io/github/last-commit/habibframbudi/Kartu-Nama-Digital)
+![GitHub issues](https://img.shields.io/github/issues/habibframbudi/Kartu-Nama-Digital)
+![GitHub stars](https://img.shields.io/github/stars/habibframbudi/Kartu-Nama-Digital)
 
 ---
 
