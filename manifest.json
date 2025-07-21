@@ -1,0 +1,133 @@
+{
+  "name": "Kartu Nama Digital - Habib Frambudi",
+  "short_name": "Habib Contact",
+  "description": "Digital business card for Habib Frambudi - Full Stack Developer & IT Engineer berpengalaman dalam React, Node.js, PHP, dan MySQL",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "display_override": ["window-controls-overlay", "standalone", "minimal-ui"],
+  "background_color": "#667eea",
+  "theme_color": "#3b82f6",
+  "orientation": "portrait-primary",
+  "icons": [
+    {
+      "src": "habib.png",
+      "sizes": "72x72",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "habib.png",
+      "sizes": "96x96",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "habib.png",
+      "sizes": "128x128",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "habib.png",
+      "sizes": "144x144",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "habib.png",
+      "sizes": "152x152",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "habib.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "habib.png",
+      "sizes": "384x384",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "habib.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ],
+  "screenshots": [
+    {
+      "src": "habib.png",
+      "sizes": "540x720",
+      "type": "image/png",
+      "form_factor": "narrow"
+    }
+  ],
+  "categories": ["business", "productivity", "social", "utilities"],
+  "lang": "id",
+  "dir": "ltr",
+  "prefer_related_applications": false,
+  "edge_side_panel": {
+    "preferred_width": 400
+  },
+  "launch_handler": {
+    "client_mode": "navigate-existing"
+  },
+  "protocol_handlers": [
+    {
+      "protocol": "mailto",
+      "url": "/?contact=%s"
+    }
+  ],
+  "shortcuts": [
+    {
+      "name": "Kontak WhatsApp",
+      "short_name": "WhatsApp",
+      "description": "Hubungi langsung via WhatsApp",
+      "url": "/?action=whatsapp",
+      "icons": [
+        {
+          "src": "habib.png",
+          "sizes": "192x192"
+        }
+      ]
+    },
+    {
+      "name": "Kirim Email",
+      "short_name": "Email",
+      "description": "Kirim email langsung",
+      "url": "/?action=email",
+      "icons": [
+        {
+          "src": "habib.png",
+          "sizes": "192x192"
+        }
+      ]
+    },
+    {
+      "name": "Lihat Portfolio",
+      "short_name": "Portfolio",
+      "description": "Kunjungi website portfolio",
+      "url": "/?action=portfolio",
+      "icons": [
+        {
+          "src": "habib.png",
+          "sizes": "192x192"
+        }
+      ]
+    }
+  ],
+  "share_target": {
+    "action": "/?share-target",
+    "method": "GET",
+    "params": {
+      "title": "title",
+      "text": "text",
+      "url": "url"
+    }
+  }
+}
