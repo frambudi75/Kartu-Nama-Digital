@@ -291,11 +291,59 @@ const setupDarkModeImmediate = () => {
     }
 };
 
-// View Counter
-let viewCount = parseInt(localStorage.getItem('viewCount') || '0');
-viewCount++;
-localStorage.setItem('viewCount', viewCount.toString());
-document.getElementById('viewCounter').textContent = viewCount;
+// Real View Counter with PHP Backend
+const updateViewCounter = async () => {
+    try {
+        const response = await fetch('visitor-counter.php', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/x-www-form-urlencoded',
+            },
+            body: 'action=increment'
+        });
+        
+        if (response.ok) {
+            const data = await response.json();
+            document.getElementById('viewCounter').textContent = data.count;
+        }
+    } catch (error) {
+        console.error('Error updating view counter:', error);
+        // Fallback to localStorage
+        let viewCount = parseInt(localStorage.getItem('viewCount') || '0');
+        viewCount++;
+        localStorage.setItem('viewCount', viewCount.toString());
+        document.getElementById('viewCounter').textContent = viewCount;
+    }
+};
+
+// Load view count on page load
+const loadViewCounter = async () => {
+    try {
+        const response = await fetch('visitor-counter.php', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/x-www-form-urlencoded',
+            },
+            body: 'action=get'
+        });
+        
+        if (response.ok) {
+            const data = await response.json();
+            document.getElementById('viewCounter').textContent = data.count;
+        } else {
+            throw new Error('Failed to load view count');
+        }
+    } catch (error) {
+        console.error('Error loading view counter:', error);
+        // Fallback to localStorage
+        let viewCount = parseInt(localStorage.getItem('viewCount') || '0');
+        document.getElementById('viewCounter').textContent = viewCount;
+    }
+};
+
+// Initialize view counter
+loadViewCounter();
+updateViewCounter();
 
 // QR Code Generation
 let qrCodeGenerated = false;
