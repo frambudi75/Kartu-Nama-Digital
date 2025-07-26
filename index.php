@@ -5,16 +5,16 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
     
     <!-- SEO Meta Tags -->
-    <title>Kartu Nama Digital - Habib Frambudi | Full Stack Developer & IT Engineer</title>
-    <meta name="description" content="Kartu nama digital Habib Frambudi - Full Stack Developer dan IT Engineer berpengalaman dalam React, Node.js, PHP, dan MySQL. Hubungi untuk konsultasi dan kerjasama proyek teknologi.">
-    <meta name="keywords" content="Habib Frambudi, Full Stack Developer, IT Engineer, React, Node.js, PHP, MySQL, Web Developer, Jakarta">
+    <title>Kartu Nama Digital - Habib Frambudi | IOT Dev & IT Engineer</title>
+    <meta name="description" content="Kartu nama digital Habib Frambudi - IOT Dev dan IT Engineer berpengalaman dalam React, Node.js, PHP, dan MySQL. Hubungi untuk konsultasi dan kerjasama proyek teknologi.">
+    <meta name="keywords" content="Habib Frambudi, IOT Dev, IT Engineer, React, Node.js, PHP, MySQL, Web Developer, Jakarta">
     <meta name="author" content="Habib Frambudi">
     <meta name="robots" content="index, follow">
     <link rel="canonical" href="https://kontak.habibframbudi.my.id">
     
     <!-- Open Graph Meta Tags -->
     <meta property="og:title" content="Kartu Nama Digital - Habib Frambudi">
-    <meta property="og:description" content="Full Stack Developer & IT Engineer berpengalaman dalam React, Node.js, PHP, dan MySQL">
+    <meta property="og:description" content="IOT Dev & IT Engineer berpengalaman dalam React, Node.js, PHP, dan MySQL">
     <meta property="og:image" content="https://kontak.habibframbudi.my.id/habib.png">
     <meta property="og:url" content="https://kontak.habibframbudi.my.id">
     <meta property="og:type" content="profile">
@@ -23,7 +23,7 @@
     <!-- Twitter Card Meta Tags -->
     <meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:title" content="Kartu Nama Digital - Habib Frambudi">
-    <meta name="twitter:description" content="Full Stack Developer & IT Engineer berpengalaman dalam React, Node.js, PHP, dan MySQL">
+    <meta name="twitter:description" content="IOT Dev & IT Engineer berpengalaman dalam React, Node.js, PHP, dan MySQL">
     <meta name="twitter:image" content="https://kontak.habibframbudi.my.id/habib.png">
     
     <!-- Security Headers -->
@@ -72,7 +72,7 @@
       "@context": "https://schema.org",
       "@type": "Person",
       "name": "Habib Frambudi",
-      "jobTitle": "Full Stack Developer",
+      "jobTitle": "IOT Dev",
       "description": "IT Engineer berpengalaman dalam React, Node.js, PHP, dan MySQL",
       "email": "habibframbudi@gmail.com",
       "telephone": "+62-817-0705-970",
@@ -126,7 +126,7 @@
                     
                     <!-- Name and Title -->
                     <h1 class="profile-name text-white">Habib Frambudi</h1>
-                    <p class="profile-title text-white">Full Stack Developer • IT Engineer</p>
+                    <p class="profile-title text-white">IOT Dev • IT Engineer</p>
                     
                     <!-- Skill Tags -->
                     <div class="mt-4 flex flex-wrap justify-center gap-2">
